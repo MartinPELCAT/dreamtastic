@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "postgres",
-  "database": "hitmarket",
+  "database": "dreamtastic",
   "synchronize": true,
   "logging": "all",
   "cache": true,

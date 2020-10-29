@@ -9,7 +9,15 @@ module.exports = {
     content: ["./pages/**/*.html", "./pages/**/*.tsx"],
   },
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        "main-background": "#2B2F77",
+        "header-background": "#141852",
+      },
+      borderColor: {
+        header: "#483475",
+      },
+    },
   },
   variants: {},
   plugins: [],

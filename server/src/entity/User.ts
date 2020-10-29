@@ -1,7 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
-import { Entity, Column, OneToMany } from "typeorm";
+import { Entity, Column } from "typeorm";
 import AbstractBaseEntity from "./AbstractBaseEntity";
-import { Post } from "./Post";
 
 @Entity()
 @ObjectType({ description: "General database" })
@@ -23,11 +22,4 @@ export class User extends AbstractBaseEntity {
 
   @Column()
   token: string;
-
-  @Field(() => [Post])
-  @OneToMany(() => Post, (post) => post.author, {
-    lazy: true,
-    cascade: ["insert"],
-  })
-  posts: Post[];
 }

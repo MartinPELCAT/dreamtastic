@@ -35,16 +35,6 @@ export type User = {
   firstName: Scalars["String"];
   lastName: Scalars["String"];
   username: Scalars["String"];
-  posts: Array<Post>;
-};
-
-export type Post = {
-  __typename?: "Post";
-  _id: Scalars["String"];
-  createdAt: Scalars["DateTime"];
-  updatedAt: Scalars["DateTime"];
-  deletedAt: Scalars["DateTime"];
-  author: User;
 };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
