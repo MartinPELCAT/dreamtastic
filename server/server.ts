@@ -5,6 +5,7 @@ import express from "express";
 import UserResolver from "./src/resolvers/UserResolver";
 import { createConnection, useContainer } from "typeorm";
 import Container from "typedi";
+import AuthenticationResolver from "./src/resolvers/AuthenticationResolver";
 
 const nextApp = next({ dev: true });
 const handler = nextApp.getRequestHandler();
@@ -17,14 +18,17 @@ export const server = async () => {
     /**
      * typeorm setup
      */
-
-    await createConnection();
+    try {
+      await createConnection();
+    } catch (error) {
+      console.error(error);
+    }
 
     /**
      * Typegraphql setup
      */
     const schema = await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, AuthenticationResolver],
       container: Container,
     });
 
@@ -38,12 +42,9 @@ export const server = async () => {
     app.all("*", (req, res) => handler(req, res)); // use page folder
 
     app.listen({ port: PORT }, () => {
-      console.log(
-        `🚀 Server ready at http://localhost:${PORT}${apollo.graphqlPath}`
-      );
-      console.log(
-        `🚀 Subscriptions ready at ws://localhost:${PORT}${apollo.subscriptionsPath}`
-      );
+      console.log(`Server ready at http://localhost:${PORT}`);
+      console.log(`Graphql at http://localhost:${PORT}${apollo.graphqlPath}`);
+      console.log(`Sub at ws://localhost:${PORT}${apollo.subscriptionsPath}`);
     });
   });
 };
