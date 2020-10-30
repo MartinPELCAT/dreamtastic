@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <AppContext>
-        <div className="min-h-screen bg-main-background">
+        <div className="min-h-screen bg-main-gradient">
           <Component {...pageProps} />
         </div>
         <Head>

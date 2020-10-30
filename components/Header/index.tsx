@@ -8,7 +8,7 @@ export default function Header() {
   const { user } = useContext(AuthenticationContext);
 
   return (
-    <div className="bg-header-background bg-opacity-75 flex px-4 py-2 text-2xl leading-none border-b border-header">
+    <div className="bg-main-header bg-opacity-75 flex px-4 py-2 text-2xl leading-none shadow-md">
       <div className="text-white flex-1 flex ">
         <Link href="/">
           <a>
