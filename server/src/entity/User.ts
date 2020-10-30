@@ -1,17 +1,15 @@
 import { Field, ObjectType } from "type-graphql";
-import { Entity, Column } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import AbstractBaseEntity from "./AbstractBaseEntity";
+import { Dream } from "./Dream";
+import { Comment } from "./Comment";
 
 @Entity()
-@ObjectType({ description: "General database" })
+@ObjectType()
 export class User extends AbstractBaseEntity {
   @Column()
   @Field()
-  firstName!: string;
-
-  @Column()
-  @Field()
-  lastName!: string;
+  description!: string;
 
   @Column()
   @Field()
@@ -22,4 +20,12 @@ export class User extends AbstractBaseEntity {
 
   @Column()
   token: string;
+
+  @OneToMany(() => Dream, (dream) => dream.author, { lazy: true })
+  @Field(() => [Dream])
+  dreams: Dream[];
+
+  @OneToMany(() => Comment, (comment) => comment.author, { lazy: true })
+  @Field(() => [Comment])
+  comments: Comment[];
 }

@@ -12,6 +12,5 @@ query getUser($userId: String!) {
 
 fragment UserFields on User {
   _id
-  firstName
-  lastName
+  username
 }

@@ -1,7 +1,9 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -14,113 +16,114 @@ export type Scalars = {
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   user?: Maybe<User>;
   users: Array<User>;
   signIn: User;
   getCurrentUser?: Maybe<User>;
 };
 
-
 export type QueryUserArgs = {
-  userId: Scalars['String'];
+  userId: Scalars["String"];
 };
-
 
 export type QuerySignInArgs = {
   user: SignInInput;
 };
 
-/** General database */
 export type User = {
-  __typename?: 'User';
-  _id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  deletedAt: Scalars['DateTime'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  username: Scalars['String'];
+  __typename?: "User";
+  _id: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  deletedAt: Scalars["DateTime"];
+  description: Scalars["String"];
+  username: Scalars["String"];
+  dreams: Array<Dream>;
+  comments: Array<Comment>;
 };
 
+export type Dream = {
+  __typename?: "Dream";
+  _id: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  deletedAt: Scalars["DateTime"];
+  content: Scalars["String"];
+  author: User;
+  comments: Array<Comment>;
+};
+
+export type Comment = {
+  __typename?: "Comment";
+  _id: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
+  deletedAt: Scalars["DateTime"];
+  content: Scalars["String"];
+  author: User;
+  dream: Dream;
+};
 
 export type SignInInput = {
-  username: Scalars['String'];
-  password: Scalars['String'];
+  username: Scalars["String"];
+  password: Scalars["String"];
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+  __typename?: "Mutation";
   signUp: User;
 };
-
 
 export type MutationSignUpArgs = {
   user: SignUpInput;
 };
 
 export type SignUpInput = {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  password: Scalars['String'];
-  username: Scalars['String'];
+  firstName: Scalars["String"];
+  lastName: Scalars["String"];
+  password: Scalars["String"];
+  username: Scalars["String"];
 };
 
-export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
+export type GetCurrentUserQuery = { __typename?: "Query" } & {
+  getCurrentUser?: Maybe<{ __typename?: "User" } & Pick<User, "username">>;
+};
 
-export type GetCurrentUserQuery = (
-  { __typename?: 'Query' }
-  & { getCurrentUser?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'firstName' | 'lastName'>
-  )> }
-);
+export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUsersQuery = (
-  { __typename?: 'Query' }
-  & { users: Array<(
-    { __typename?: 'User' }
-    & UserFieldsFragment
-  )> }
-);
+export type GetUsersQuery = { __typename?: "Query" } & {
+  users: Array<{ __typename?: "User" } & UserFieldsFragment>;
+};
 
 export type GetUserQueryVariables = Exact<{
-  userId: Scalars['String'];
+  userId: Scalars["String"];
 }>;
 
+export type GetUserQuery = { __typename?: "Query" } & {
+  user?: Maybe<{ __typename?: "User" } & UserFieldsFragment>;
+};
 
-export type GetUserQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & UserFieldsFragment
-  )> }
-);
-
-export type UserFieldsFragment = (
-  { __typename?: 'User' }
-  & Pick<User, '_id' | 'firstName' | 'lastName'>
-);
+export type UserFieldsFragment = { __typename?: "User" } & Pick<
+  User,
+  "_id" | "username"
+>;
 
 export const UserFieldsFragmentDoc = gql`
-    fragment UserFields on User {
-  _id
-  firstName
-  lastName
-}
-    `;
-export const GetCurrentUserDocument = gql`
-    query GetCurrentUser {
-  getCurrentUser {
-    firstName
-    lastName
+  fragment UserFields on User {
+    _id
+    username
   }
-}
-    `;
+`;
+export const GetCurrentUserDocument = gql`
+  query GetCurrentUser {
+    getCurrentUser {
+      username
+    }
+  }
+`;
 
 /**
  * __useGetCurrentUserQuery__
@@ -137,22 +140,46 @@ export const GetCurrentUserDocument = gql`
  *   },
  * });
  */
-export function useGetCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<GetCurrentUserQuery, GetCurrentUserQueryVariables>) {
-        return Apollo.useQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(GetCurrentUserDocument, baseOptions);
-      }
-export function useGetCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCurrentUserQuery, GetCurrentUserQueryVariables>) {
-          return Apollo.useLazyQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(GetCurrentUserDocument, baseOptions);
-        }
-export type GetCurrentUserQueryHookResult = ReturnType<typeof useGetCurrentUserQuery>;
-export type GetCurrentUserLazyQueryHookResult = ReturnType<typeof useGetCurrentUserLazyQuery>;
-export type GetCurrentUserQueryResult = Apollo.QueryResult<GetCurrentUserQuery, GetCurrentUserQueryVariables>;
-export const GetUsersDocument = gql`
-    query getUsers {
-  users {
-    ...UserFields
-  }
+export function useGetCurrentUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetCurrentUserQuery,
+    GetCurrentUserQueryVariables
+  >
+) {
+  return Apollo.useQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(
+    GetCurrentUserDocument,
+    baseOptions
+  );
 }
-    ${UserFieldsFragmentDoc}`;
+export function useGetCurrentUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCurrentUserQuery,
+    GetCurrentUserQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetCurrentUserQuery, GetCurrentUserQueryVariables>(
+    GetCurrentUserDocument,
+    baseOptions
+  );
+}
+export type GetCurrentUserQueryHookResult = ReturnType<
+  typeof useGetCurrentUserQuery
+>;
+export type GetCurrentUserLazyQueryHookResult = ReturnType<
+  typeof useGetCurrentUserLazyQuery
+>;
+export type GetCurrentUserQueryResult = Apollo.QueryResult<
+  GetCurrentUserQuery,
+  GetCurrentUserQueryVariables
+>;
+export const GetUsersDocument = gql`
+  query getUsers {
+    users {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 
 /**
  * __useGetUsersQuery__
@@ -169,22 +196,41 @@ export const GetUsersDocument = gql`
  *   },
  * });
  */
-export function useGetUsersQuery(baseOptions?: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
-        return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, baseOptions);
-      }
-export function useGetUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersQuery, GetUsersQueryVariables>) {
-          return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, baseOptions);
-        }
-export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
-export type GetUsersLazyQueryHookResult = ReturnType<typeof useGetUsersLazyQuery>;
-export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQueryVariables>;
-export const GetUserDocument = gql`
-    query getUser($userId: String!) {
-  user(userId: $userId) {
-    ...UserFields
-  }
+export function useGetUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUsersQuery, GetUsersQueryVariables>
+) {
+  return Apollo.useQuery<GetUsersQuery, GetUsersQueryVariables>(
+    GetUsersDocument,
+    baseOptions
+  );
 }
-    ${UserFieldsFragmentDoc}`;
+export function useGetUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUsersQuery,
+    GetUsersQueryVariables
+  >
+) {
+  return Apollo.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(
+    GetUsersDocument,
+    baseOptions
+  );
+}
+export type GetUsersQueryHookResult = ReturnType<typeof useGetUsersQuery>;
+export type GetUsersLazyQueryHookResult = ReturnType<
+  typeof useGetUsersLazyQuery
+>;
+export type GetUsersQueryResult = Apollo.QueryResult<
+  GetUsersQuery,
+  GetUsersQueryVariables
+>;
+export const GetUserDocument = gql`
+  query getUser($userId: String!) {
+    user(userId: $userId) {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 
 /**
  * __useGetUserQuery__
@@ -202,12 +248,25 @@ export const GetUserDocument = gql`
  *   },
  * });
  */
-export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-      }
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-        }
+export function useGetUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>
+) {
+  return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(
+    GetUserDocument,
+    baseOptions
+  );
+}
+export function useGetUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>
+) {
+  return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(
+    GetUserDocument,
+    baseOptions
+  );
+}
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export type GetUserQueryResult = Apollo.QueryResult<
+  GetUserQuery,
+  GetUserQueryVariables
+>;

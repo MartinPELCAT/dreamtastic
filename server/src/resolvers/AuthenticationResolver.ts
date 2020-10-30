@@ -23,8 +23,6 @@ export default class AuthenticationResolver {
         { lastName, firstName, date: Date.now(), username },
         process.env.JWT_SECRET
       ),
-      firstName,
-      lastName,
       password: encryptedPassword,
       username,
     });

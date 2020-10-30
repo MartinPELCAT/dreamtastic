@@ -1,20 +1,28 @@
-import { GetCurrentUserQuery } from "apollo/__generated__";
-import React, { createContext, PropsWithChildren } from "react";
+import {
+  GetCurrentUserQuery,
+  useGetCurrentUserQuery,
+} from "apollo/__generated__";
+import React, { createContext, FC, useEffect, useState } from "react";
+
+type ContextUser = GetCurrentUserQuery["getCurrentUser"];
 
 type ContextType = {
-  user?: GetCurrentUserQuery["getCurrentUser"];
+  user?: ContextUser;
 };
 
 export const AuthenticationContext = createContext<ContextType>(undefined);
 
-export default function AuthenticationContextProvider(
-  props: PropsWithChildren<{}>
-) {
+export const AuthenticationContextProvider: FC = ({ children }) => {
+  const { data } = useGetCurrentUserQuery();
+  const [user, setUser] = useState<ContextUser>();
+
+  useEffect(() => {
+    setUser(data ? data.getCurrentUser : null);
+  }, [data]);
+
   return (
-    <AuthenticationContext.Provider
-      value={{ user: undefined }}
-    >
-      {props.children}
+    <AuthenticationContext.Provider value={{ user }}>
+      {children}
     </AuthenticationContext.Provider>
   );
-}
+};
